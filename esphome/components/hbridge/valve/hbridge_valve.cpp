@@ -134,9 +134,9 @@ void HBridgeValve::interpret_toggle_() {
         case VALVE_STATE_UNKNOWN:    // Toggling from unknown will request a close
           this->valve_cmd_ = VALVE_CMD_CLOSE;
           break;
-        case VALVE_STATE_CLOSE:
+        case VALVE_STATE_CLOSED:
           this->valve_cmd_ = VALVE_CMD_OPEN;
-          break
+          break;
         default:
           this->valve_cmd_ = VALVE_CMD_NONE; // Should never happen unless code above is changed so the TOGGLE UNKNOWN is not interpreted as CLOSE
       }
