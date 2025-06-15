@@ -47,6 +47,7 @@ class HBridgeValve : public valve::Valve, public Component {
 
   float get_setup_priority() const override;
   void setup() override;
+  void loop() override;
   void dump_config() override;
 
  protected:

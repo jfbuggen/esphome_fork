@@ -162,7 +162,7 @@ void HBridgeValve::dump_config() {
     ESP_LOGCONFIG(TAG, "  Wakeup time %" PRId32 " ms", this->wakeup_duration_ms_);
 }
 
-ValveTraits TemplateValve::get_traits() {
+ValveTraits HBridgeValve::get_traits() {
   auto traits = ValveTraits();
   traits.set_is_assumed_state(false);
   traits.set_supports_stop(false);
@@ -205,9 +205,11 @@ void HBridgeValve::hbridge_pulse_end_(bool open) {
 
 bool HBridgeValve::hbridge_sleep_(bool sleep) {
   if (this->pin_sleep_ != nullptr) {
-	 this->pin_sleep_->digital_write((this->pin_sleep_->is_inverted ? sleep : !sleep)));
+	 this->pin_sleep_->digital_write((this->pin_sleep_->is_inverted() ? sleep : !sleep)));
 	 return true;
   }
   return false;
 }
 
+}  // namespace hbridge
+}  // namespace esphome
