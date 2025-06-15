@@ -55,7 +55,7 @@ class HBridgeValve : public valve::Valve, public Component {
   ValveState valve_state_{VALVE_STATE_UNKNOWN};
   bool optimistic_{false};
   void control(const valve::ValveCall &call) override;
-  void interpret_toggle(void)_;
+  void interpret_toggle_(void);
   void publish_position(bool open_);
   valve::ValveTraits get_traits() override;
 
@@ -67,10 +67,10 @@ class HBridgeValve : public valve::Valve, public Component {
   uint32_t wait_duration_ms_{0};
   uint32_t wakeup_duration_ms_{0};
   HbridgeState hbridge_state_{HbridgeState::HBRIDGE_IDLE};
-  void hbridge_setup();
+  void hbridge_setup_();
   void hbridge_pulse_start_(bool open);
   void hbridge_pulse_end_(bool open);
-  bool hbridge_sleep(bool sleep);
+  bool hbridge_sleep_(bool sleep);
   
 
 };

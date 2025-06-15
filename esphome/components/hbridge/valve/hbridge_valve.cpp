@@ -10,7 +10,7 @@ static const char *const TAG = "hbridge.valve";
 
 void HBridgeValve::setup() {
   ESP_LOGCONFIG(TAG, "Running setup for '%s'", this->name_.c_str());
-  this->hbridge_setup();
+  this->hbridge_setup_();
 }
 
 void HBridgeValve::loop() {
@@ -22,7 +22,7 @@ void HBridgeValve::loop() {
       case HbridgeState::HBRIDGE_SLEEP:
 		// Wakeup if a command is waiting
         if (this->valve_cmd_ != VALVE_CMD_NONE) {
-		  if ((this->hbridge_sleep(false) && (this->wakeup_duration_ms_ > 0)) {
+		  if ((this->hbridge_sleep_(false) && (this->wakeup_duration_ms_ > 0)) {
 			// Launch wakeup timeout to become IDLE only after wakeup_time (ms)
 			this->hbridge_state_ = HbridgeState::HBRIDGE_WAKEUP;
 		    this->set_timeout("wakeup", this->wakeup_duration_ms_, [this]() {
@@ -60,7 +60,7 @@ void HBridgeValve::loop() {
 		  }		  
         } else {
           // Set to sleep (if no pin configured, returns false and stay IDLE)
-          if (this->hbridge_sleep(true)) {
+          if (this->hbridge_sleep_(true)) {
             this->hbridge_state_ = HbridgeState::HBRIDGE_SLEEP;
           }
         }
@@ -171,7 +171,7 @@ ValveTraits TemplateValve::get_traits() {
   return traits;
 }
 
-void HBridgeValve::hbridge_setup(void)
+void HBridgeValve::hbridge_setup_(void)
 {
   this->pin_a_->setup();
   this->pin_b_->setup();
@@ -203,7 +203,7 @@ void HBridgeValve::hbridge_pulse_end_(bool open) {
 	}
 }
 
-bool HBridgeValve::hbridge_sleep(bool sleep) {
+bool HBridgeValve::hbridge_sleep_(bool sleep) {
   if (this->pin_sleep_ != nullptr) {
 	 this->pin_sleep_->digital_write((this->pin_sleep_->is_inverted ? sleep : !sleep)));
 	 return true;
