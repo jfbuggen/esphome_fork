@@ -1,6 +1,6 @@
 from esphome import pins
 import esphome.codegen as cg
-from esphome.components import switch
+from esphome.components import valve
 import esphome.config_validation as cv
 from esphome.const import (
     CONF_ID,
