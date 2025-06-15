@@ -6,7 +6,7 @@ from esphome.const import (
     CONF_ID,
     CONF_PIN_A,
     CONF_PIN_B,
-    CONF_PIN_SLEEP,
+    CONF_SLEEP_PIN,
     CONF_PULSE_LENGTH,
     CONF_WAIT_TIME,
     CONF_OPTIMISTIC,
