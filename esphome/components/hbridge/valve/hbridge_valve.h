@@ -8,12 +8,14 @@
 namespace esphome {
 namespace hbridge {
 
-enum HbridgeState : unit8_t {
-  HBRIDGE_IDLE = 0,
-  HBRIDGE_PULSE = 1,
-  HBRIDGE_WAIT = 2,
-  HBRIDGE_SLEEP = 3,
-  HBRIDGE_WAKEUP = 4,
+// State machine for the HBridge
+enum class HbridgeState {
+  HBRIDGE_IDLE,			// Ready to process a new command
+  HBRIDGE_PULSE,		// Busy generating the pulse from the last command
+  HBRIDGE_PULSE_END,	// End of pulse
+  HBRIDGE_WAIT,			// Need to wait after last pulse (if wait_time configured)
+  HBRIDGE_SLEEP,		// Sleep mode activated (if sleep pin is configured)
+  HBRIDGE_WAKEUP		// Need to wait after wakeup (if sleep pin is configured and wakeup_time as well)
 };
 
 enum ValveState : uint8_t {
@@ -36,9 +38,9 @@ class HBridgeValve : public valve::Valve, public Component {
   void set_pin_a(GPIOPin *pin) { this->pin_a_ = pin; }
   void set_pin_b(GPIOPin *pin) { this->pin_b_ = pin; }
   void set_pin_sleep(GPIOPin *pin) { this->pin_sleep_ = pin; }
-  void set_pulse_length(uint32_t pulse_length) { this->pulse_length_ = pulse_length; }
-  void set_wait_time(uint32_t wait_time) { this->wait_time_ = wait_time; }
-
+  void set_pulse_length(uint32_t pulse_length) { this->pulse_duration_ms_ = pulse_length; }
+  void set_wait_time(uint32_t wait_time) { this->wait_duration_ms_ = wait_time; }
+  void set_wakeup_time(uint32_t wakeup_time) { this->wakeup_duration_ms_= wakeup_time; }
   void set_optimistic(bool optimistic) { this->optimistic_ = optimistic; }
 
   valve::ValveTraits get_traits() override { return this->traits_; }
@@ -48,24 +50,29 @@ class HBridgeValve : public valve::Valve, public Component {
   void dump_config() override;
 
  protected:
+   // Valve
+  ValveCmd valve_cmd_{VALVE_CMD_NONE};
+  ValveState valve_state_{VALVE_STATE_UNKNOWN};
+  bool optimistic_{false};
+  void control(const valve::ValveCall &call) override;
+  void interpret_toggle(void)_;
+  void publish_position(bool open_);
+  valve::ValveTraits get_traits() override;
+
+  // HBridge
   GPIOPin *pin_a_{nullptr};
   GPIOPin *pin_b_{nullptr};
   GPIOPin *pin_sleep_{nullptr};
-  uint32_t pulse_length_{50};
-  uint32_t wait_time_{0};
+  uint32_t pulse_duration_ms_{50};
+  uint32_t wait_duration_ms_{0};
+  uint32_t wakeup_duration_ms_{0};
+  HbridgeState hbridge_state_{HbridgeState::HBRIDGE_IDLE};
+  void hbridge_setup();
+  void hbridge_pulse_start_(bool open);
+  void hbridge_pulse_end_(bool open);
+  bool hbridge_sleep(bool sleep);
+  
 
-  bool timer_running_{false};
-  bool pulse_busy_{false};
-  bool wait_busy_{false};
-  ValveCmd valve_cmd_{VALVE_CMD_NONE};
-  HbridgeState hbridge_state_{HBRIDGE_IDLE};
-  ValveState valve_state_{VALVE_STATE_UNKNOWN};
-  bool optimistic_{false};
-
-  void control(const valve::ValveCall &call) override;
-  valve::ValveTraits get_traits() override;
-  void write_state(bool state) override;
-  void timer_fn_();
 };
 
 }  // namespace hbridge
