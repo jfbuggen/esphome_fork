@@ -1,4 +1,4 @@
-#pragma once
+O#pragma once
 
 #include "esphome/core/component.h"
 #include "esphome/core/automation.h"
@@ -37,7 +37,7 @@ class HBridgeValve : public valve::Valve, public Component {
 
   void set_pin_a(GPIOPin *pin) { this->pin_a_ = pin; }
   void set_pin_b(GPIOPin *pin) { this->pin_b_ = pin; }
-  void set_pin_sleep(GPIOPin *pin) { this->pin_sleep_ = pin; }
+  void set_pin_sleep(InternalGPIOPin *pin) { this->pin_sleep_ = pin; }
   void set_pulse_length(uint32_t pulse_length) { this->pulse_duration_ms_ = pulse_length; }
   void set_wait_time(uint32_t wait_time) { this->wait_duration_ms_ = wait_time; }
   void set_wakeup_time(uint32_t wakeup_time) { this->wakeup_duration_ms_= wakeup_time; }
@@ -61,7 +61,7 @@ class HBridgeValve : public valve::Valve, public Component {
   // HBridge
   GPIOPin *pin_a_{nullptr};
   GPIOPin *pin_b_{nullptr};
-  GPIOPin *pin_sleep_{nullptr};
+  InternalGPIOPin *pin_sleep_{nullptr};
   uint32_t pulse_duration_ms_{50};
   uint32_t wait_duration_ms_{0};
   uint32_t wakeup_duration_ms_{0};
