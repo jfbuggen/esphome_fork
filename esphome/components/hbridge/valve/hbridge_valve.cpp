@@ -20,6 +20,7 @@ void HBridgeValve::loop() {
 	// h-bridge state machine
     switch(this->hbridge_state_) {
       case HbridgeState::HBRIDGE_SLEEP:
+        {
 		// Wakeup if a command is waiting
         if (this->valve_cmd_ != VALVE_CMD_NONE) {
 		  if ((this->hbridge_sleep_(false)) && (this->wakeup_duration_ms_ > 0)) {
@@ -33,10 +34,14 @@ void HBridgeValve::loop() {
 		  }
         }
         break;
+    } 
 	  case HbridgeState::HBRIDGE_WAKEUP:
+    {
 		// Do nothing, timeout callback will move to IDLE
 		break;
+    } 
       case HbridgeState::HBRIDGE_IDLE:
+        {
 		// Convert toggle to OPEN, CLOSE or NONE
         if (this->valve_cmd_ == VALVE_CMD_TOGGLE) {
 		  this->interpret_toggle_();
@@ -65,10 +70,14 @@ void HBridgeValve::loop() {
           }
         }
         break;
+       } 
       case HbridgeState::HBRIDGE_PULSE:
+        {
         // Do nothing, timeout callback will move to PULSE_END
         break;
+    } 
 	  case HbridgeState::HBRIDGE_PULSE_END:
+    {
 		bool open_ = (this->current_operation == VALVE_OPERATION_OPENING);
   this->hbridge_pulse_end_(open_);
 		if (!this->optimistic_) {
@@ -85,9 +94,12 @@ void HBridgeValve::loop() {
 			});
 		}
 		break;
+       } 
       case HbridgeState::HBRIDGE_WAIT:
+        {
         // Do nothing, timeout callback will move to IDLE
         break;
+       } 
     }
 
 	// Note: this will not log state changes via timeouts
