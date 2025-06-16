@@ -33,7 +33,6 @@ enum ValveCmd: uint8_t {
 
 class HBridgeValve : public valve::Valve, public Component {
  public:
-  HBridgeValve();
 
   void set_pin_a(GPIOPin *pin) { this->pin_a_ = pin; }
   void set_pin_b(GPIOPin *pin) { this->pin_b_ = pin; }
