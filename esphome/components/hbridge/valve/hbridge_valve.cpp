@@ -22,7 +22,7 @@ void HBridgeValve::loop() {
       case HbridgeState::HBRIDGE_SLEEP:
 		// Wakeup if a command is waiting
         if (this->valve_cmd_ != VALVE_CMD_NONE) {
-		  if ((this->hbridge_sleep_(false) && (this->wakeup_duration_ms_ > 0)) {
+		  if ((this->hbridge_sleep_(false)) && (this->wakeup_duration_ms_ > 0)) {
 			// Launch wakeup timeout to become IDLE only after wakeup_time (ms)
 			this->hbridge_state_ = HbridgeState::HBRIDGE_WAKEUP;
 		    this->set_timeout("wakeup", this->wakeup_duration_ms_, [this]() {
@@ -69,7 +69,7 @@ void HBridgeValve::loop() {
         // Do nothing, timeout callback will move to PULSE_END
         break;
 	  case HbridgeState::HBRIDGE_PULSE_END:
-		this->end_pulse_();
+		this->hbridge_pulse_end_();
 		bool open_ = (this->current_operation == VALVE_OPERATION_OPENING);
 		if (!this->optimistic) {
 			this->publish_position(open_);
