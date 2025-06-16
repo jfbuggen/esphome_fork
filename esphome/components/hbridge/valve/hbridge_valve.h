@@ -43,8 +43,6 @@ class HBridgeValve : public valve::Valve, public Component {
   void set_wakeup_time(uint32_t wakeup_time) { this->wakeup_duration_ms_= wakeup_time; }
   void set_optimistic(bool optimistic) { this->optimistic_ = optimistic; }
 
-  valve::ValveTraits get_traits() override { return this->traits_; }
-
   float get_setup_priority() const override;
   void setup() override;
   void loop() override;
