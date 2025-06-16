@@ -217,7 +217,7 @@ void HBridgeValve::hbridge_pulse_end_(bool open) {
 
 bool HBridgeValve::hbridge_sleep_(bool sleep) {
   if (this->pin_sleep_ != nullptr) {
-	 this->pin_sleep_->digital_write((this->pin_sleep_->is_inverted() ? sleep : !sleep)));
+	 this->pin_sleep_->digital_write((this->pin_sleep_->is_inverted() ? sleep : !sleep));
 	 return true;
   }
   return false;
