@@ -69,16 +69,16 @@ void HBridgeValve::loop() {
         // Do nothing, timeout callback will move to PULSE_END
         break;
 	  case HbridgeState::HBRIDGE_PULSE_END:
-		this->hbridge_pulse_end_();
 		bool open_ = (this->current_operation == VALVE_OPERATION_OPENING);
-		if (!this->optimistic) {
+  this->hbridge_pulse_end_(open_);
+		if (!this->optimistic_) {
 			this->publish_position(open_);
 		}
 		this->current_operation = VALVE_OPERATION_IDLE;
 		if (this->wait_duration_ms_ == 0) {
 		  this->hbridge_state_ = HbridgeState::HBRIDGE_IDLE;
 		} else {
-		  this->hbridge_state = HbridgeState::HBRIDGE_WAIT;
+		  this->hbridge_state_ = HbridgeState::HBRIDGE_WAIT;
 		  // Launch wait timeout
 		  this->set_timeout("wait", this->wait_duration_ms_, [this]() {
 			this->hbridge_state_ = HbridgeState::HBRIDGE_IDLE;
