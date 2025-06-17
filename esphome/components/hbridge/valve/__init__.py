@@ -25,7 +25,7 @@ CONFIG_SCHEMA = (
         {
             cv.Required(CONF_PIN_A): pins.gpio_output_pin_schema,
             cv.Required(CONF_PIN_B): pins.gpio_output_pin_schema,
-            cv.Optional(CONF_SLEEP_PIN): pins.gpio_output_pin_schema,
+            cv.Optional(CONF_SLEEP_PIN): pins.internal_gpio_output_pin_schema,
             cv.Optional(CONF_PULSE_LENGTH, default="50ms"): cv.positive_time_period_milliseconds,
             cv.Optional(CONF_WAIT_TIME, default="0ms"): cv.positive_time_period_milliseconds,
             cv.Optional(CONF_WAKEUP_TIME, default="1ms"): cv.positive_time_period_milliseconds,
