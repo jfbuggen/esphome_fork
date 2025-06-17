@@ -42,6 +42,8 @@ class HBridgeValve : public valve::Valve, public Component {
   void set_wakeup_time(uint32_t wakeup_time) { this->wakeup_duration_ms_= wakeup_time; }
   void set_optimistic(bool optimistic) { this->optimistic_ = optimistic; }
 
+  valve::ValveTraits get_traits() override;
+
   float get_setup_priority() const override;
   void setup() override;
   void loop() override;
@@ -49,15 +51,20 @@ class HBridgeValve : public valve::Valve, public Component {
 
  protected:
    // Valve
-  ValveCmd valve_cmd_{VALVE_CMD_NONE};
-  ValveState valve_state_{VALVE_STATE_UNKNOWN};
   bool optimistic_{false};
   void control(const valve::ValveCall &call) override;
   void interpret_toggle_(void);
   void publish_position(bool open_);
-  valve::ValveTraits get_traits() override;
+
+  ValveCmd valve_cmd_{VALVE_CMD_NONE};
+  ValveState valve_state_{VALVE_STATE_UNKNOWN};
 
   // HBridge
+  void hbridge_setup_();
+  void hbridge_pulse_start_(bool open);
+  void hbridge_pulse_end_(bool open);
+  bool hbridge_sleep_(bool sleep);
+  
   GPIOPin *pin_a_{nullptr};
   GPIOPin *pin_b_{nullptr};
   InternalGPIOPin *pin_sleep_{nullptr};
@@ -65,11 +72,6 @@ class HBridgeValve : public valve::Valve, public Component {
   uint32_t wait_duration_ms_{0};
   uint32_t wakeup_duration_ms_{0};
   HbridgeState hbridge_state_{HbridgeState::HBRIDGE_IDLE};
-  void hbridge_setup_();
-  void hbridge_pulse_start_(bool open);
-  void hbridge_pulse_end_(bool open);
-  bool hbridge_sleep_(bool sleep);
-  
 
 };
 
