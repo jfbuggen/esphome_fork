@@ -8,6 +8,8 @@ using namespace esphome::valve;
 
 static const char *const TAG = "hbridge.valve";
 
+float HBridgeValve::get_setup_priority() const { return setup_priority::HARDWARE; }
+
 void HBridgeValve::setup() {
   ESP_LOGCONFIG(TAG, "Running setup for '%s'", this->name_.c_str());
   this->hbridge_setup_();
