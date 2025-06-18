@@ -15,7 +15,7 @@ from .. import hbridge_ns
 
 HBridgeValve = hbridge_ns.class_("HBridgeValve", valve.Valve, cg.Component)
 
-CONF_WAKEUP_TIME = "conf_wakeup_time"
+CONF_WAKEUP_TIME = "wakeup_time"
 
 CODEOWNERS = ["@jfbuggen"]
 
@@ -43,8 +43,8 @@ async def to_code(config):
     cg.add(var.set_pin_a(pin_a))
     pin_b = await cg.gpio_pin_expression(config[CONF_PIN_B])
     cg.add(var.set_pin_b(pin_b))
-    if pin_sleep_config := config.get(CONF_SLEEP_PIN):
-        pin_sleep = await cg.gpio_pin_expression(pin_sleep_config)
+    if sleep_pin_config := config.get(CONF_SLEEP_PIN):
+        sleep_pin = await cg.gpio_pin_expression(sleep_pin_config)
         cg.add(var.set_pin_sleep(sleep_pin))
     cg.add(var.set_pulse_length(config[CONF_PULSE_LENGTH]))
     cg.add(var.set_wait_time(config[CONF_WAIT_TIME]))
