@@ -25,7 +25,8 @@ void HBridgeValve::loop() {
         {
 		// Wakeup if a command is waiting
         if (this->valve_cmd_ != VALVE_CMD_NONE) {
-		  if ((this->hbridge_sleep_(false)) && (this->wakeup_duration_ms_ > 0)) {
+          ESP_LOGD(TAG,"Waking up");
+          if ((this->hbridge_sleep_(false)) && (this->wakeup_duration_ms_ > 0)) {
 			// Launch wakeup timeout to become IDLE only after wakeup_time (ms)
 			this->hbridge_state_ = HbridgeState::HBRIDGE_WAKEUP;
 		    this->set_timeout("wakeup", this->wakeup_duration_ms_, [this]() {
@@ -46,11 +47,13 @@ void HBridgeValve::loop() {
         {
 		// Convert toggle to OPEN, CLOSE or NONE
         if (this->valve_cmd_ == VALVE_CMD_TOGGLE) {
+          ESP_LOGD(TAG,"Toggle received");
 		  this->interpret_toggle_();
 		}
 		if (this->valve_cmd_ != VALVE_CMD_NONE) {
 		  // Execute command
 		  bool open_ = (this->valve_cmd_ == VALVE_CMD_OPEN);
+      ESP_LOGD(TAG,"Command %s"open_ ? "OPEN" : "CLOSE");
 		  this->hbridge_pulse_start_(open_);
 		  this->current_operation = (open_ ? VALVE_OPERATION_OPENING : VALVE_OPERATION_CLOSING);
 		  if (this->optimistic_) {
@@ -85,6 +88,7 @@ void HBridgeValve::loop() {
 		if (!this->optimistic_) {
 			this->publish_position(open_);
 		}
+    ESP_LOGD(TAG,"Pulse end");  
 		this->current_operation = VALVE_OPERATION_IDLE;
 		if (this->wait_duration_ms_ == 0) {
 		  this->hbridge_state_ = HbridgeState::HBRIDGE_IDLE;
