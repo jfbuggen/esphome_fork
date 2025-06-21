@@ -215,9 +215,6 @@ void HBridgeValve::hbridge_pulse_start_(bool open) {
 void HBridgeValve::hbridge_pulse_end_(bool open) {
     this->pin_a_->digital_write(false);
     this->pin_b_->digital_write(false);
-    if (!this->optimistic_) {
-	  this->publish_position(open);
-	}
 }
 
 bool HBridgeValve::hbridge_sleep_(bool sleep) {
