@@ -204,12 +204,12 @@ void HBridgeValve::hbridge_pulse_start_(bool open) {
           this->pin_a_->digital_write(false);
           this->pin_b_->digital_write(true);
           if (this->optimistic_)
-			this->publish_state(true);
+			this->publish_position(true);
     } else {
 		return;
 	}
     if (this->optimistic_) {
-	  this->publish_state(open);
+	  this->publish_position(open);
 	}
 }
 
@@ -217,7 +217,7 @@ void HBridgeValve::hbridge_pulse_end_(bool open) {
     this->pin_a_->digital_write(false);
     this->pin_b_->digital_write(false);
     if (!this->optimistic_) {
-	  this->publish_state(open);
+	  this->publish_position(open);
 	}
 }
 
