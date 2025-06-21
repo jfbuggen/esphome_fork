@@ -207,13 +207,8 @@ void HBridgeValve::hbridge_pulse_start_(bool open) {
     } else if ((this->valve_state_ == VALVE_STATE_CLOSED) && (open)) {
           this->pin_a_->digital_write(false);
           this->pin_b_->digital_write(true);
-          if (this->optimistic_)
-			this->publish_position(true);
     } else {
 		return;
-	}
-    if (this->optimistic_) {
-	  this->publish_position(open);
 	}
 }
 
