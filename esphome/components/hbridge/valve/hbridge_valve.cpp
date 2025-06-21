@@ -58,6 +58,7 @@ void HBridgeValve::loop() {
 		  this->hbridge_pulse_start_(open_);
 		  this->current_operation = (open_ ? VALVE_OPERATION_OPENING : VALVE_OPERATION_CLOSING);
 		  if (this->optimistic_) {
+       ESP_LOGD(TAG,"Publishing at command start");
 			 this->publish_position(open_);
 		  }
 		  if (this->pulse_duration_ms_ == 0) {
@@ -87,6 +88,7 @@ void HBridgeValve::loop() {
 		bool open_ = (this->current_operation == VALVE_OPERATION_OPENING);
   this->hbridge_pulse_end_(open_);
 		if (!this->optimistic_) {
+      ESP_LOGD(TAG,"Publishing at pulse end");
 			this->publish_position(open_);
 		}
     ESP_LOGD(TAG,"Pulse end");  
@@ -163,6 +165,7 @@ void HBridgeValve::interpret_toggle_() {
 }
 
 void HBridgeValve::publish_position(bool open_) {
+  ESP_LOGD(TAG,"Publishing position");
 	this->position = (open_ ? VALVE_OPEN : VALVE_CLOSED);
 	this->publish_state(true);
 }
