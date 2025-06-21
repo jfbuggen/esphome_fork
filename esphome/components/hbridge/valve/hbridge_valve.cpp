@@ -53,7 +53,7 @@ void HBridgeValve::loop() {
 		if (this->valve_cmd_ != VALVE_CMD_NONE) {
 		  // Execute command
 		  bool open_ = (this->valve_cmd_ == VALVE_CMD_OPEN);
-      ESP_LOGD(TAG,"Command %s"open_ ? "OPEN" : "CLOSE");
+      ESP_LOGD(TAG,"Command %s", open_ ? "OPEN" : "CLOSE");
 		  this->hbridge_pulse_start_(open_);
 		  this->current_operation = (open_ ? VALVE_OPERATION_OPENING : VALVE_OPERATION_CLOSING);
 		  if (this->optimistic_) {
