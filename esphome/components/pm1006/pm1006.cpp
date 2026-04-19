@@ -44,8 +44,6 @@ void PM1006Component::loop() {
   }
 }
 
-float PM1006Component::get_setup_priority() const { return setup_priority::DATA; }
-
 uint8_t PM1006Component::pm1006_checksum_(const uint8_t *command_data, uint8_t length) const {
   uint8_t sum = 0;
   for (uint8_t i = 0; i < length; i++) {
@@ -93,10 +91,6 @@ void PM1006Component::parse_data_() {
   if (this->pm_2_5_sensor_ != nullptr) {
     this->pm_2_5_sensor_->publish_state(pm_2_5_concentration);
   }
-}
-
-uint16_t PM1006Component::get_16_bit_uint_(uint8_t start_index) const {
-  return encode_uint16(this->data_[start_index], this->data_[start_index + 1]);
 }
 
 }  // namespace pm1006

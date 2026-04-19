@@ -26,8 +26,6 @@ static const uint16_t SCD30_CMD_TEMPERATURE_OFFSET = 0x5403;
 static const uint16_t SCD30_CMD_SOFT_RESET = 0xD304;
 
 void SCD30Component::setup() {
-  ESP_LOGCONFIG(TAG, "Running setup");
-
 #ifdef USE_ESP8266
   Wire.setClockStretchLimit(150000);
 #endif
@@ -140,10 +138,13 @@ void SCD30Component::dump_config() {
   } else {
     ESP_LOGCONFIG(TAG, "  Altitude compensation: %dm", this->altitude_compensation_);
   }
-  ESP_LOGCONFIG(TAG, "  Automatic self calibration: %s", ONOFF(this->enable_asc_));
-  ESP_LOGCONFIG(TAG, "  Ambient pressure compensation: %dmBar", this->ambient_pressure_compensation_);
-  ESP_LOGCONFIG(TAG, "  Temperature offset: %.2f °C", this->temperature_offset_);
-  ESP_LOGCONFIG(TAG, "  Update interval: %ds", this->update_interval_);
+  ESP_LOGCONFIG(TAG,
+                "  Automatic self calibration: %s\n"
+                "  Ambient pressure compensation: %dmBar\n"
+                "  Temperature offset: %.2f °C\n"
+                "  Update interval: %ds",
+                ONOFF(this->enable_asc_), this->ambient_pressure_compensation_, this->temperature_offset_,
+                this->update_interval_);
   LOG_SENSOR("  ", "CO2", this->co2_sensor_);
   LOG_SENSOR("  ", "Temperature", this->temperature_sensor_);
   LOG_SENSOR("  ", "Humidity", this->humidity_sensor_);
@@ -221,7 +222,7 @@ bool SCD30Component::force_recalibration_with_reference(uint16_t co2_reference) 
 }
 
 uint16_t SCD30Component::get_forced_calibration_reference() {
-  uint16_t forced_calibration_reference;
+  uint16_t forced_calibration_reference = 0;
   // Get current CO2 calibration
   if (!this->get_register(SCD30_CMD_FORCED_CALIBRATION, forced_calibration_reference)) {
     ESP_LOGE(TAG, "Unable to read forced calibration reference.");
