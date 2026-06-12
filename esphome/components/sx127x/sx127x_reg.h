@@ -228,6 +228,8 @@ enum SX127xPacketConfig1 : uint8_t {
 enum SX127xPacketConfig2 : uint8_t {
   CONTINUOUS_MODE = 0x00,
   PACKET_MODE = 0x40,
+  IOHOME_ON = 0x20,
+  IOHOME_PWRFRM = 0x10,
 };
 
 enum SX127xFifoThresh : uint8_t {
