@@ -79,6 +79,7 @@ class SX127x : public Component,
   void set_shaping(uint8_t shaping) { this->shaping_ = shaping; }
   void set_spreading_factor(uint8_t spreading_factor) { this->spreading_factor_ = spreading_factor; }
   void set_sync_value(const std::vector<uint8_t> &sync_value) { this->sync_value_ = sync_value; }
+  void set_iohc_mode(bool iohc_mode) { this->iohc_mode_ = iohc_mode; }
   void run_image_cal();
   void configure();
   SX127xError transmit_packet(const std::vector<uint8_t> &packet);
@@ -123,6 +124,7 @@ class SX127x : public Component,
   bool crc_enable_{false};
   bool packet_mode_{false};
   bool rx_start_{false};
+  bool iohc_mode_{false};
 };
 
 }  // namespace esphome::sx127x
