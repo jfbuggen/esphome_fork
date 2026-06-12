@@ -156,6 +156,7 @@ void SX127x::configure_fsk_ook_() {
   }
 
   // configure packet mode
+  uint8_t iohc_flags = (this->iohc_mode_) ? IOHOME_ON | IOHOME_PWRFRM : 0x00;
   if (this->packet_mode_) {
     uint8_t crc_mode = (this->crc_enable_) ? CRC_ON : CRC_OFF;
     this->write_register_(REG_FIFO_THRESH, TX_START_FIFO_EMPTY);
@@ -166,9 +167,9 @@ void SX127x::configure_fsk_ook_() {
       this->write_register_(REG_PAYLOAD_LENGTH_LSB, this->get_max_packet_size() - 1);
       this->write_register_(REG_PACKET_CONFIG_1, crc_mode | VARIABLE_LENGTH);
     }
-    this->write_register_(REG_PACKET_CONFIG_2, PACKET_MODE);
+    this->write_register_(REG_PACKET_CONFIG_2, iohc_flags | PACKET_MODE);
   } else {
-    this->write_register_(REG_PACKET_CONFIG_2, CONTINUOUS_MODE);
+    this->write_register_(REG_PACKET_CONFIG_2, iohc_flags | CONTINUOUS_MODE);
   }
   this->write_register_(REG_DIO_MAPPING1, DIO0_MAPPING_00);
 
