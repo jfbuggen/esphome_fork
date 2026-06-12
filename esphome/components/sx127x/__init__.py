@@ -35,6 +35,7 @@ CONF_RX_START = "rx_start"
 CONF_SHAPING = "shaping"
 CONF_SPREADING_FACTOR = "spreading_factor"
 CONF_SYNC_VALUE = "sync_value"
+CONF_IOHC_MODE = "iohc_mode"
 
 sx127x_ns = cg.esphome_ns.namespace("sx127x")
 SX127x = sx127x_ns.class_("SX127x", cg.Component, spi.SPIDevice)
@@ -222,6 +223,7 @@ CONFIG_SCHEMA = (
             cv.Optional(CONF_SHAPING, default="NONE"): cv.enum(SHAPING),
             cv.Optional(CONF_SPREADING_FACTOR, default=7): cv.int_range(min=6, max=12),
             cv.Optional(CONF_SYNC_VALUE, default=[]): cv.ensure_list(cv.hex_uint8_t),
+            cv.Optional(CONF_IOHC_MODE, default=False): cv.boolean,
         },
     )
     .extend(cv.COMPONENT_SCHEMA)
@@ -273,7 +275,7 @@ async def to_code(config):
     cg.add(var.set_sync_value(config[CONF_SYNC_VALUE]))
     cg.add(var.set_rx_floor(config[CONF_RX_FLOOR]))
     cg.add(var.set_rx_start(config[CONF_RX_START]))
-
+    cg.add(var.set_iohc_mode(config[CONF_IOHC_MODE]))
 
 NO_ARGS_ACTION_SCHEMA = automation.maybe_simple_id(
     {
